@@ -1,0 +1,43 @@
+{
+  "name": "expo-google-places",
+  "version": "0.1.0",
+  "description": "Expo library to use the Google Places API",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "open:ios": "open -a \"Xcode\" example/ios",
+    "open:android": "open -a \"Android Studio\" example/android"
+  },
+  "keywords": [
+    "react-native",
+    "expo",
+    "expo-google-places",
+    "ExpoGooglePlaces"
+  ],
+  "repository": "https://github.com/devpgcs/expo-google-places",
+  "bugs": {
+    "url": "https://github.com/devpgcs/expo-google-places/issues"
+  },
+  "author": "Pedro Castro <devpgcs@hotmail.com> (https://github.com/devpgcs)",
+  "license": "MIT",
+  "homepage": "https://github.com/devpgcs/expo-google-places#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/react": "^18.0.25",
+    "@types/react-native": "^0.70.6",
+    "expo-module-scripts": "^3.0.4",
+    "expo-modules-core": "^1.1.0"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  }
+}

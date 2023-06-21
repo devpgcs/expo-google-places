@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-google-places": ["../src/index"],
+      "expo-google-places/*": ["../src/*"]
+    }
+  }
+}

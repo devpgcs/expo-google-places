@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android", "web"],
+  "ios": {
+    "modules": ["ExpoGooglePlacesModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.googleplaces.ExpoGooglePlacesModule"]
+  }
+}
