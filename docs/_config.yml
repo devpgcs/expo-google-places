@@ -21,7 +21,7 @@
 title: Expo Google Places
 email: devpgcs@hotmail.com
 description: Expo library to use the Google Places API
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/expo-google-places" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: jekyllrb
 github_username: devpgcs
