@@ -1,5 +1,7 @@
 import { ConfigContext, ExpoConfig } from "@expo/config";
 
+require("dotenv").config();
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: config.name || "Example: Expo Google Places",
