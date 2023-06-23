@@ -1,26 +1,24 @@
-import { NativeModulesProxy, EventEmitter, Subscription } from 'expo-modules-core';
+import ExpoGooglePlacesModule from "./ExpoGooglePlacesModule";
 
-// Import the native module. On web, it will be resolved to ExpoGooglePlaces.web.ts
-// and on native platforms to ExpoGooglePlaces.ts
-import ExpoGooglePlacesModule from './ExpoGooglePlacesModule';
-import ExpoGooglePlacesView from './ExpoGooglePlacesView';
-import { ChangeEventPayload, ExpoGooglePlacesViewProps } from './ExpoGooglePlaces.types';
+import { AutocompleteFilter } from "./interfaces/autocomplete-filter.interface";
+import { AutocompletePrediction } from "./interfaces/autocomplete-prediction.interface";
+import { LatLng } from "./interfaces/lat-lng.interface";
+import { PlaceTypesTableOne } from "./types/place-types-table-one.type";
+import { PlaceTypesTableThree } from "./types/place-types-table-three.type";
+import { PlaceTypesTableTwo } from "./types/place-types-table-two.type";
 
-// Get the native constant value.
-export const PI = ExpoGooglePlacesModule.PI;
+export const fetchWithSession = async (
+  inputText: string,
+  filter?: AutocompleteFilter
+): Promise<AutocompletePrediction[]> => {
+  return await ExpoGooglePlacesModule.fetchWithSession(inputText, filter);
+};
 
-export function hello(): string {
-  return ExpoGooglePlacesModule.hello();
-}
-
-export async function setValueAsync(value: string) {
-  return await ExpoGooglePlacesModule.setValueAsync(value);
-}
-
-const emitter = new EventEmitter(ExpoGooglePlacesModule ?? NativeModulesProxy.ExpoGooglePlaces);
-
-export function addChangeListener(listener: (event: ChangeEventPayload) => void): Subscription {
-  return emitter.addListener<ChangeEventPayload>('onChange', listener);
-}
-
-export { ExpoGooglePlacesView, ExpoGooglePlacesViewProps, ChangeEventPayload };
+export {
+  AutocompleteFilter,
+  AutocompletePrediction,
+  LatLng,
+  PlaceTypesTableOne,
+  PlaceTypesTableThree,
+  PlaceTypesTableTwo,
+};
