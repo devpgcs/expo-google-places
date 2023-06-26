@@ -8,7 +8,7 @@ public class ExpoGooglePlacesModule: Module {
     public func definition() -> ModuleDefinition {
         Name("ExpoGooglePlaces")
         
-        AsyncFunction("fetchWithSession") { (inputText: String, originalFilter: AutocompleteFilter?, promise: Promise) in
+        AsyncFunction("fetchPredictionsWithSession") { (inputText: String, originalFilter: AutocompleteFilter?, promise: Promise) in
             // Creating a new delegate everytime, we are making sure that promise instance will change properly.
             //
             // Also, we must save the delegate in the higher scope that we can (The module class), in that way
@@ -24,41 +24,25 @@ public class ExpoGooglePlacesModule: Module {
             fetcher.provide(sessionToken)
             fetcher.sourceTextHasChanged(inputText)
         }.runOnQueue(DispatchQueue.main)
-    }
-    
-    private func serializeAutocompleteFilter(originalFiler: AutocompleteFilter?) -> GMSAutocompleteFilter? {
-        if let originalFiler = originalFiler {
-            let serializedFilter = GMSAutocompleteFilter()
+        
+        AsyncFunction("fetchPlaceWithSession") { (placeID: String, originalPlaceFields: [String]?, promise: Promise) in
+            let placeFields = (originalPlaceFields != nil) ? serializePlaceFields(originalFields: originalPlaceFields!) : GMSPlaceField(rawValue: GMSPlaceField.all.rawValue)
             
-            if let types = originalFiler.types {
-                serializedFilter.types = types
-            }
             
-            if let countries = originalFiler.countries {
-                serializedFilter.countries = countries
-            }
-            
-            if let origin = originalFiler.origin {
-                serializedFilter.origin = CLLocation(latitude: origin.latitude, longitude: origin.longitude)
-            }
-            
-            if let locationBias = originalFiler.locationBias {
-                let northEastBounds = CLLocationCoordinate2DMake(locationBias.northEastBounds.latitude, locationBias.northEastBounds.longitude)
-                let southWestBounds = CLLocationCoordinate2DMake(locationBias.southWestBounds.latitude, locationBias.southWestBounds.longitude)
+            GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeID, placeFields: placeFields, sessionToken: sessionToken) { place, error in
+                // Once we use the session token to fetch a place, we must update it since the session has finished.
+                self.sessionToken = GMSAutocompleteSessionToken.init()
                 
-                serializedFilter.locationBias = GMSPlaceRectangularLocationOption(northEastBounds, southWestBounds)
-            }
-            
-            if let locationRestriction = originalFiler.locationRestriction {
-                let northEastBounds = CLLocationCoordinate2DMake(locationRestriction.northEastBounds.latitude, locationRestriction.northEastBounds.longitude)
-                let southWestBounds = CLLocationCoordinate2DMake(locationRestriction.southWestBounds.latitude, locationRestriction.southWestBounds.longitude)
+                if let error = error {
+                    promise.reject(error)
+                    return
+                }
                 
-                serializedFilter.locationRestriction = GMSPlaceRectangularLocationOption(northEastBounds, southWestBounds)
+                if let place = place {
+                    promise.resolve(getPlaceDictionary(place: place))
+                }
             }
             
-            return serializedFilter
-        } else {
-            return nil
-        }
+        }.runOnQueue(DispatchQueue.main)
     }
 }
