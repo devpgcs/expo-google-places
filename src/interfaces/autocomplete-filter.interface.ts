@@ -11,21 +11,21 @@ export interface AutocompleteFilter {
   /**
    * The countries to restrict results to.
    */
-  countries?: string[];
+  countries: string[];
   /**
    * The optional location bias to prefer place results near the location.
    */
-  locationBias?: LocationBounds;
+  locationBias: LocationBounds;
   /**
    * The optional location restriction to limit the place results to.
    */
-  locationRestriction?: LocationBounds;
+  locationRestriction: LocationBounds;
   /**
    * The straight line distance origin location for measuring the straight line distance between the origin location and autocomplete predictions.
    */
-  origin?: LatLng;
+  origin: LatLng;
   /**
    * The filter applied to an autocomplete request to restrict results using up to 5 different place types.
    */
-  types?: PlaceTypesTableOne[] | PlaceTypesTableTwo[] | PlaceTypesTableThree[];
+  types: PlaceTypesTableOne[] | PlaceTypesTableTwo[] | PlaceTypesTableThree[];
 }

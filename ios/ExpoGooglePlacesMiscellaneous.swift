@@ -137,88 +137,200 @@ internal func serializePlaceFields(originalFields: [String]) -> GMSPlaceField.Ar
     return serializedPlaceFields
 }
 
-internal func getPlaceDictionary(place: GMSPlace) -> [String: Any] {
-    return [
-        "addressComponents": place.addressComponents?.map { addressComponent in
+internal func getPlaceDictionary(place: GMSPlace) -> [String: Any?] {
+    var placeDictionary: [String: Any?] = [:]
+    
+    if let addressComponents = place.addressComponents {
+        placeDictionary["addressComponents"] = addressComponents.map { addressComponent in
             [
                 "types": addressComponent.types,
                 "name": addressComponent.name,
-                "shortName": addressComponent.shortName as Any
-            ]
-        } as Any,
-        "businessStatus": place.businessStatus.rawValue,
-        "coordinate": [
-            "latitude": place.coordinate.latitude,
-            "longitude": place.coordinate.longitude
-        ],
-        "curbsidePickup": place.curbsidePickup.rawValue,
-        "delivery": place.delivery.rawValue,
-        "dineIn": place.dineIn.rawValue,
-        "formattedAddress": place.formattedAddress as Any,
-        "iconBackgroundColor": place.iconBackgroundColor?.description as Any,
-        "iconImageURL": place.iconImageURL?.absoluteString as Any,
-        "name": place.name as Any,
-        "openingHours": [
-            "weekdayText": place.openingHours?.weekdayText as Any,
-            "periods": place.openingHours?.periods?.map { period in
-                [
+                "shortName": addressComponent.shortName
+            ] as [String : Any?]
+        }
+    }
+    
+    if let businessStatus = place.businessStatus as GMSPlacesBusinessStatus? {
+        placeDictionary["businessStatus"] = businessStatus.rawValue
+    }
+    
+    if let coordinate = place.coordinate as CLLocationCoordinate2D? {
+        placeDictionary["coordinate"] = [
+            "latitude": coordinate.latitude,
+            "longitude": coordinate.longitude
+        ]
+    }
+    
+    if let curbsidePickup = place.curbsidePickup as GMSBooleanPlaceAttribute? {
+        placeDictionary["curbsidePickup"] = curbsidePickup.rawValue
+    }
+
+    if let delivery = place.delivery as GMSBooleanPlaceAttribute? {
+        placeDictionary["delivery"] = delivery.rawValue
+    }
+    
+    if let dineIn = place.dineIn as GMSBooleanPlaceAttribute? {
+        placeDictionary["dineIn"] = dineIn.rawValue
+    }
+    
+    if let formattedAddress = place.formattedAddress {
+        placeDictionary["formattedAddress"] = formattedAddress
+    }
+    
+    if let iconBackgroundColor = place.iconBackgroundColor {
+        placeDictionary["iconBackgroundColor"] = iconBackgroundColor.description
+    }
+    
+    if let iconImageURL = place.iconImageURL {
+        placeDictionary["iconImageURL"] = iconImageURL.absoluteString
+    }
+    
+    if let name = place.name {
+        placeDictionary["name"] = name
+    }
+    
+    if let openingHours = place.openingHours {
+        var openingHoursDictionary: [String: Any?] = [:]
+        
+        if let periods = openingHours.periods {
+            openingHoursDictionary["periods"] = periods.map { period in
+                var periodDictionary: [String: Any?] = [
                     "openEvent": [
                         "day": period.openEvent.day.rawValue,
                         "time": [
                             "hour": period.openEvent.time.hour,
                             "minute": period.openEvent.time.minute
                         ]
-                    ],
-                    "closeEvent": [
-                        "day": period.closeEvent?.day.rawValue as Any,
+                    ] as [String : Any]
+                ]
+                
+                if let closeEvent = period.closeEvent {
+                    periodDictionary["closeEvent"] = [
+                        "day": closeEvent.day.rawValue,
                         "time": [
-                            "hour": period.closeEvent?.time.hour,
-                            "minute": period.closeEvent?.time.minute
+                            "hour": closeEvent.time.hour,
+                            "minute": closeEvent.time.minute
                         ]
-                    ]
-                ]
-            } as Any
-        ],
-        "phoneNumber": place.phoneNumber as Any,
-        "photos": place.photos?.map { photo in
-            [
-                "attributions": photo.attributions?.string as Any,
-                "maxSize": [
-                    "width": photo.maxSize.width,
-                    "height": photo.maxSize.height
-                ]
+                    ] as [String : Any]
+                }
+                
+                return periodDictionary
+            }
+        }
+        
+        if let weekdayText = openingHours.weekdayText {
+            openingHoursDictionary["weekdayText"] = openingHours.weekdayText
+        }
+        
+        placeDictionary["openingHours"] = openingHoursDictionary
+    }
+    
+    if let phoneNumber = place.phoneNumber {
+        placeDictionary["phoneNumber"] = phoneNumber
+    }
+    
+    if let photos = place.photos {
+        placeDictionary["photos"] = photos.map { photo in
+            var photoDictionary: [String: Any?] = [
+                "height": photo.maxSize.height,
+                "width": photo.maxSize.width,
             ]
-        } as Any,
-        "placeID": place.placeID as Any,
-        "plusCode": [
-            "globalCode": place.plusCode?.globalCode,
-            "compoundCode": place.plusCode?.compoundCode
-        ],
-        "priceLevel": place.priceLevel.rawValue,
-        "rating": place.rating,
-        "reservable": place.reservable.rawValue,
-        "servesBeer": place.servesBeer.rawValue,
-        "servesBreakfast": place.servesBreakfast.rawValue,
-        "servesBrunch": place.servesBrunch.rawValue,
-        "servesDinner": place.servesDinner.rawValue,
-        "servesLunch": place.servesLunch.rawValue,
-        "servesVegetarianFood": place.servesVegetarianFood.rawValue,
-        "servesWine": place.servesWine.rawValue,
-        "takeout": place.takeout.rawValue,
-        "types": place.types as Any,
-        "userRatingsTotal": place.userRatingsTotal,
-        "utcOffsetMinutes": place.utcOffsetMinutes as Any,
-        "viewportInfo": [
-            "northEast": [
-                "latitude": place.viewportInfo?.northEast.latitude,
-                "longitude": place.viewportInfo?.northEast.longitude
+
+            if let attributions = photo.attributions {
+                photoDictionary["attributions"] = attributions.string
+            }
+            
+            return photoDictionary
+        }
+    }
+    
+    if let placeID = place.placeID {
+        placeDictionary["placeID"] = placeID
+    }
+    
+    if let plusCode = place.plusCode {
+        placeDictionary["plusCode"] = [
+            "globalCode": plusCode.globalCode,
+            "compoundCode": plusCode.compoundCode
+        ]
+    }
+    
+    if let priceLevel = place.priceLevel as GMSPlacesPriceLevel? {
+        placeDictionary["priceLevel"] = priceLevel.rawValue
+    }
+    
+    if let rating = place.rating as Float? {
+        placeDictionary["rating"] = rating
+    }
+    
+    if let reservable = place.reservable as GMSBooleanPlaceAttribute? {
+        placeDictionary["reservable"] = reservable.rawValue
+    }
+    
+    if let servesBeer = place.servesBeer as GMSBooleanPlaceAttribute? {
+        placeDictionary["servesBeer"] = servesBeer.rawValue
+    }
+    
+    if let servesBreakfast = place.servesBreakfast as GMSBooleanPlaceAttribute? {
+        placeDictionary["servesBreakfast"] = servesBreakfast.rawValue
+    }
+    
+    if let servesBrunch = place.servesBrunch as GMSBooleanPlaceAttribute? {
+        placeDictionary["servesBrunch"] = servesBrunch.rawValue
+    }
+    
+    if let servesDinner = place.servesDinner as GMSBooleanPlaceAttribute? {
+        placeDictionary["servesDinner"] = servesDinner.rawValue
+    }
+    
+    if let servesLunch = place.servesLunch as GMSBooleanPlaceAttribute? {
+        placeDictionary["servesLunch"] = servesLunch.rawValue
+    }
+    
+    if let servesVegetarianFood = place.servesVegetarianFood as GMSBooleanPlaceAttribute? {
+        placeDictionary["servesVegetarianFood"] = servesVegetarianFood.rawValue
+    }
+    
+    if let servesWine = place.servesWine as GMSBooleanPlaceAttribute? {
+        placeDictionary["servesWine"] = servesWine.rawValue
+    }
+    
+    if let takeout = place.takeout as GMSBooleanPlaceAttribute? {
+        placeDictionary["takeout"] = takeout.rawValue
+    }
+    
+    if let types = place.types {
+        placeDictionary["types"] = types
+    }
+    
+    if let userRatingsTotal = place.userRatingsTotal as UInt? {
+        placeDictionary["userRatingsTotal"] = userRatingsTotal
+    }
+    
+    if let utcOffsetMinutes = place.utcOffsetMinutes {
+        placeDictionary["utcOffsetMinutes"] = utcOffsetMinutes
+    }
+    
+    if let viewportInfo = place.viewportInfo {
+        placeDictionary["viewportInfo"] = [
+            "northEastBounds": [
+                "latitude": viewportInfo.northEast.latitude,
+                "longitude": viewportInfo.northEast.longitude
             ],
-            "southWest": [
-                "latitude": place.viewportInfo?.southWest.latitude,
-                "longitude": place.viewportInfo?.southWest.longitude
+            "southWestBounds": [
+                "latitude": viewportInfo.southWest.latitude,
+                "longitude": viewportInfo.southWest.longitude
             ],
-        ],
-        "website": place.website?.absoluteString as Any,
-        "wheelchairAccessibleEntrance": place.wheelchairAccessibleEntrance.rawValue,
-    ]
+        ]
+    }
+    
+    if let website = place.website {
+        placeDictionary["website"] = website.absoluteString
+    }
+    
+    if let wheelchairAccessibleEntrance = place.wheelchairAccessibleEntrance as GMSBooleanPlaceAttribute? {
+        placeDictionary["wheelchairAccessibleEntrance"] = wheelchairAccessibleEntrance.rawValue
+    }
+    
+    return placeDictionary
 }

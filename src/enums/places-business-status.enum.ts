@@ -1,10 +1,19 @@
+/**
+ * The business status of a place.
+ *
+ * @todo Define the final values for it when working on Android features. Try to make it consistent for both platforms.
+ */
 export enum PlacesBusinessStatus {
-  /** The business status is not known. */
-  Unknown,
+  /**
+   * The business status is not known.
+   *
+   * @platform iOS
+   */
+  UNKNOWN = -1,
   /** The business is operational. */
-  Operational,
+  OPERATIONAL = 0,
   /** The business is closed temporarily. */
-  ClosedTemporarily,
+  CLOSED_TEMPORARILY = 1,
   /** The business is closed permanently. */
-  ClosedPermanently,
+  CLOSED_PERMANENTLY = 2,
 }
