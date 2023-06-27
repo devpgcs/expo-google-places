@@ -59,3 +59,8 @@ android/keystores/debug.keystore
 
 # Expo
 .expo/*
+
+# Environment Variables
+.env
+.env.*
+.*.env

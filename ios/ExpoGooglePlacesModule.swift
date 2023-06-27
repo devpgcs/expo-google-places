@@ -1,44 +1,48 @@
+import GooglePlaces
 import ExpoModulesCore
 
 public class ExpoGooglePlacesModule: Module {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
-  public func definition() -> ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoGooglePlaces')` in JavaScript.
-    Name("ExpoGooglePlaces")
-
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants([
-      "PI": Double.pi
-    ])
-
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
-
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      return "Hello world! 👋"
+    private var sessionToken = GMSAutocompleteSessionToken.init()
+    private var autocompleteFetcherDelegate: AutocompleteFetcherDelegate?
+        
+    public func definition() -> ModuleDefinition {
+        Name("ExpoGooglePlaces")
+        
+        AsyncFunction("fetchPredictionsWithSession") { (inputText: String, originalFilter: AutocompleteFilter?, promise: Promise) in
+            // Creating a new delegate everytime, we are making sure that promise instance will change properly.
+            //
+            // Also, we must save the delegate in the higher scope that we can (The module class), in that way
+            // the instance won't be deleted once the function body is executed.
+            self.autocompleteFetcherDelegate = AutocompleteFetcherDelegate(modulePromise: promise)
+            
+            
+            let filter = serializeAutocompleteFilter(originalFiler: originalFilter)
+            let fetcher = GMSAutocompleteFetcher(filter: filter)
+            
+            fetcher.delegate = self.autocompleteFetcherDelegate
+            
+            fetcher.provide(sessionToken)
+            fetcher.sourceTextHasChanged(inputText)
+        }.runOnQueue(DispatchQueue.main)
+        
+        AsyncFunction("fetchPlaceWithSession") { (placeID: String, originalPlaceFields: [String]?, promise: Promise) in
+            let placeFields = (originalPlaceFields != nil) ? serializePlaceFields(originalFields: originalPlaceFields!) : GMSPlaceField(rawValue: GMSPlaceField.all.rawValue)
+            
+            
+            GMSPlacesClient.shared().fetchPlace(fromPlaceID: placeID, placeFields: placeFields, sessionToken: sessionToken) { place, error in
+                // Once we use the session token to fetch a place, we must update it since the session has finished.
+                self.sessionToken = GMSAutocompleteSessionToken.init()
+                
+                if let error = error {
+                    promise.reject(error)
+                    return
+                }
+                
+                if let place = place {
+                    promise.resolve(getPlaceDictionary(place: place))
+                }
+            }
+            
+        }.runOnQueue(DispatchQueue.main)
     }
-
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { (value: String) in
-      // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of the
-    // view definition: Prop, Events.
-    View(ExpoGooglePlacesView.self) {
-      // Defines a setter for the `name` prop.
-      Prop("name") { (view: ExpoGooglePlacesView, prop: String) in
-        print(prop)
-      }
-    }
-  }
 }
