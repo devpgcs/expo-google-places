@@ -1,6 +1,6 @@
 {
   "name": "expo-google-places",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Expo library to use the Google Places API",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -27,7 +27,7 @@
   },
   "author": "Pedro Castro <devpgcs@hotmail.com> (https://github.com/devpgcs)",
   "license": "MIT",
-  "homepage": "https://github.com/devpgcs/expo-google-places#readme",
+  "homepage": "https://devpgcs.github.io/expo-google-places",
   "dependencies": {},
   "devDependencies": {
     "@types/react": "^18.0.25",
