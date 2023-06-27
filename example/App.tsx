@@ -1,18 +1,16 @@
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-
-import * as ExpoGooglePlaces from "expo-google-places";
 import { useState } from "react";
-import { AutocompletePrediction } from "expo-google-places";
+import * as ExpoGooglePlaces from "expo-google-places";
 
 export default function App() {
-  const [predictions, setPredictions] = useState<AutocompletePrediction[]>([]);
+  const [predictions, setPredictions] = useState<ExpoGooglePlaces.AutocompletePrediction[]>([]);
 
   const fetchPlace = async (placeID: string) => {
     try {
       const placeDetails = await ExpoGooglePlaces.fetchPlaceWithSession(placeID, ["formattedAddress"]);
-      console.log("Place details", JSON.stringify(placeDetails, null, 4));
+      console.log("[Example App] Place details", JSON.stringify(placeDetails, null, 4));
     } catch (error) {
-      console.log("Error fetching place details", error);
+      console.log("[Example App] Error fetching place details", error);
     }
   };
 
@@ -21,7 +19,7 @@ export default function App() {
       const predictions = await ExpoGooglePlaces.fetchPredictionsWithSession(search);
       setPredictions(predictions);
     } catch (error) {
-      console.log("Error fetching predictions", error);
+      console.log("[Example App] Error fetching predictions", error);
     }
   };
 
@@ -43,11 +41,11 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 16,
+    paddingVertical: 100,
   },
   input: {
     borderWidth: 1,
