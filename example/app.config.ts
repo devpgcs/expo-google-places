@@ -11,6 +11,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-google-places",
       {
+        androidApiKey: process.env.GOOGLE_PLACES_API_KEY_FOR_ANDROID,
         iosApiKey: process.env.GOOGLE_PLACES_API_KEY_FOR_IOS,
       },
     ],
