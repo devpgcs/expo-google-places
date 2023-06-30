@@ -2,8 +2,6 @@
  * Identifies the type of secondary opening hours.
  *
  * Is only set for secondary opening hours (i.e. opening hours from `Place.secondaryOpeningHours`).
- *
- * @todo Define the final values for it when working on Android features.
  */
 export enum HoursType {
   /**

@@ -1,4 +1,4 @@
-import { ConfigPlugin, withInfoPlist } from "@expo/config-plugins";
+import { AndroidConfig, ConfigPlugin, withAndroidManifest, withInfoPlist } from "@expo/config-plugins";
 import { ExpoGooglePlacesPluginInput } from "./interfaces/expo-google-places-plugin-input.interface";
 
 // This is not being tested since is not a complex plugin and it's not worth it. Also, the best practices don't apply here.
@@ -12,16 +12,31 @@ const withGoogleApiKey: ConfigPlugin<ExpoGooglePlacesPluginInput> = (config, plu
     console.warn('[ExpoGooglePlaces] "iosApiKey" is missing. If this was intentional, ignore this warning.');
   }
 
-  let finalConfig = config;
+  if (pluginInput.androidApiKey) {
+    config = withAndroidManifest(config, (config) => {
+      const mainApplication = AndroidConfig.Manifest.getMainApplicationOrThrow(config.modResults);
+
+      AndroidConfig.Manifest.addMetaDataItemToMainApplication(
+        mainApplication,
+        // We're using this constant name because it's the recommended one by Google.
+        // in the following documentation: https://developers.google.com/maps/documentation/places/android-sdk/config#get-an-api-key
+        // check the NOTE under the step 6.
+        `com.google.android.geo.API_KEY`,
+        pluginInput.androidApiKey!
+      );
+
+      return config;
+    });
+  }
 
   if (pluginInput.iosApiKey) {
-    finalConfig = withInfoPlist(config, (finalConfig) => {
-      finalConfig.modResults.GMSPlacesAPIKey = pluginInput.iosApiKey;
+    config = withInfoPlist(config, (finalConfig) => {
+      finalConfig.modResults["GMSPlacesAPIKey"] = pluginInput.iosApiKey;
       return finalConfig;
     });
   }
 
-  return finalConfig;
+  return config;
 };
 
 export default withGoogleApiKey;

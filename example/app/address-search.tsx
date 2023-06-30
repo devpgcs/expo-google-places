@@ -7,7 +7,7 @@ export default function App() {
 
   const fetchPlace = async (placeID: string) => {
     try {
-      const placeDetails = await ExpoGooglePlaces.fetchPlaceWithSession(placeID, ["formattedAddress"]);
+      const placeDetails = await ExpoGooglePlaces.fetchPlaceWithSession(placeID, ["formattedAddress", "coordinate"]);
       console.log("[Example App] Place details", JSON.stringify(placeDetails, null, 4));
     } catch (error) {
       console.log("[Example App] Error fetching place details", error);
@@ -25,7 +25,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Hello Google Places module!</Text>
+      <Text>Search an address</Text>
 
       <TextInput placeholder="Search an address" style={styles.input} onChangeText={fetchPredictions} />
 
@@ -64,5 +64,6 @@ const styles = StyleSheet.create({
   },
   predictionText: {
     flex: 1,
+    marginRight: 16,
   },
 });

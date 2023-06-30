@@ -1,7 +1,5 @@
 /**
  * The business status of a place.
- *
- * @todo Define the final values for it when working on Android features. Try to make it consistent for both platforms.
  */
 export enum PlacesBusinessStatus {
   /**

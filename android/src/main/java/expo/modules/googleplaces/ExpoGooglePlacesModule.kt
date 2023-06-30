@@ -2,46 +2,78 @@ package expo.modules.googleplaces
 
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import android.content.pm.PackageManager
+import android.util.Log
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
+import com.google.android.libraries.places.api.net.PlacesClient
+import expo.modules.kotlin.Promise
+import expo.modules.kotlin.exception.CodedException
 
 class ExpoGooglePlacesModule : Module() {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
+  private var sessionToken = AutocompleteSessionToken.newInstance()
+  private lateinit var placesClient: PlacesClient
+
   override fun definition() = ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoGooglePlaces')` in JavaScript.
     Name("ExpoGooglePlaces")
 
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants(
-      "PI" to Math.PI
-    )
+    OnCreate {
+      val packageName = appContext?.reactContext?.packageName.toString()
+      val applicationInfo = appContext?.reactContext?.packageManager?.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+      val placesApiKey = applicationInfo?.metaData?.getString("com.google.android.geo.API_KEY")
 
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
+      Places.initialize(appContext.reactContext, placesApiKey)
 
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      "Hello world! 👋"
-    }
-
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { value: String ->
-      // Send an event to JavaScript.
-      sendEvent("onChange", mapOf(
-        "value" to value
-      ))
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of
-    // the view definition: Prop, Events.
-    View(ExpoGooglePlacesView::class) {
-      // Defines a setter for the `name` prop.
-      Prop("name") { view: ExpoGooglePlacesView, prop: String ->
-        println(prop)
+      if (Places.isInitialized()) {
+        placesClient = Places.createClient(appContext.reactContext)
+        Log.d("ExpoGooglePlaces", "The com.google.android.geo.API_KEY was provided successfully. PlacesClient initialized")
       }
+    }
+
+    AsyncFunction("fetchPredictionsWithSession") { inputText: String, originalFilter: AutocompleteFilter?, promise: Promise ->
+      val request = serializeAutocompleteFilter(originalFilter)
+        .setSessionToken(sessionToken)
+        .setQuery(inputText)
+        .build()
+
+      placesClient.findAutocompletePredictions(request)
+        .addOnSuccessListener { response: FindAutocompletePredictionsResponse ->
+          promise.resolve(
+            response.autocompletePredictions.map {
+              mapOf(
+                "fullText" to it.getFullText(null).toString(),
+                "primaryText" to it.getPrimaryText(null).toString(),
+                "placeID" to it.placeId,
+                "types" to it.placeTypes.map { it -> it.name.lowercase() },
+                "distanceMeters" to it.distanceMeters,
+                "secondaryText" to it.getSecondaryText(null).toString()
+              )
+            }
+          )
+        }.addOnFailureListener { exception: Exception? ->
+            promise.reject(CodedException(exception?.localizedMessage ?: "Unknown"))
+        }
+    }
+
+    AsyncFunction("fetchPlaceWithSession") { placeId: String, originalPlaceFields: List<String>?, promise: Promise ->
+      val requestFields = serializePlaceFields(originalPlaceFields)
+      val request = FetchPlaceRequest.builder(placeId, requestFields)
+        .setSessionToken(sessionToken)
+        .build()
+
+      placesClient.fetchPlace(request)
+        .addOnSuccessListener { response: FetchPlaceResponse ->
+          // Once we use the session token to fetch a place, we must update it since the session has finished.
+          sessionToken = AutocompleteSessionToken.newInstance()
+
+          promise.resolve(getPlaceMap(response.place))
+        }.addOnFailureListener { exception: Exception ->
+          promise.reject(CodedException(exception.localizedMessage ?: "Unknown"))
+        }
     }
   }
 }
