@@ -1,7 +1,5 @@
 /**
  * Represents a day of the week.
- *
- * @todo Define the final values for it when working on Android features.
  */
 export enum DayOfWeek {
   /**
