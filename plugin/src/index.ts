@@ -18,7 +18,10 @@ const withGoogleApiKey: ConfigPlugin<ExpoGooglePlacesPluginInput> = (config, plu
 
       AndroidConfig.Manifest.addMetaDataItemToMainApplication(
         mainApplication,
-        `expo.modules.googleplaces.GOOGLE_PLACES_API_KEY`,
+        // We're using this constant name because it's the recommended one by Google.
+        // in the following documentation: https://developers.google.com/maps/documentation/places/android-sdk/config#get-an-api-key
+        // check the NOTE under the step 6.
+        `com.google.android.geo.API_KEY`,
         pluginInput.androidApiKey!
       );
 
