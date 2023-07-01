@@ -7,11 +7,11 @@ export enum PlacesBusinessStatus {
    *
    * @platform iOS
    */
-  UNKNOWN = -1,
+  UNKNOWN,
   /** The business is operational. */
-  OPERATIONAL = 0,
+  OPERATIONAL,
   /** The business is closed temporarily. */
-  CLOSED_TEMPORARILY = 1,
+  CLOSED_TEMPORARILY,
   /** The business is closed permanently. */
-  CLOSED_PERMANENTLY = 2,
+  CLOSED_PERMANENTLY,
 }
