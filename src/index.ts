@@ -1,4 +1,4 @@
-import ExpoGooglePlacesModule from "./ExpoGooglePlacesModule";
+import { requireNativeModule } from "expo-modules-core";
 
 // Enums
 import { BooleanPlaceAttribute } from "./enums/boolean-place-attribute.enum";
@@ -27,6 +27,8 @@ import { TimeOfWeek } from "./interfaces/time-of-week.interface";
 import { PlaceTypesTableOne } from "./types/place-types-table-one.type";
 import { PlaceTypesTableThree } from "./types/place-types-table-three.type";
 import { PlaceTypesTableTwo } from "./types/place-types-table-two.type";
+
+const ExpoGooglePlacesModule = requireNativeModule("ExpoGooglePlaces");
 
 /**
  * Fetches place predictions asynchronously using the session-based approach and returns a list of predictions, with up to five autocomplete predictions.
