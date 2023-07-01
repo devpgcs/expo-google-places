@@ -12,7 +12,7 @@
     "dotenv": "^16.3.1",
     "expo": "~48.0.18",
     "expo-constants": "~14.2.1",
-    "expo-google-places": "file:../expo-google-places-0.2.0.tgz",
+    "expo-google-places": "file:../expo-google-places-0.2.1.tgz",
     "expo-linking": "~4.0.1",
     "expo-router": "^1.0.0",
     "expo-splash-screen": "~0.18.2",

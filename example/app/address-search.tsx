@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import { useState } from "react";
 import * as ExpoGooglePlaces from "expo-google-places";
 
@@ -7,10 +7,10 @@ export default function App() {
 
   const fetchPlace = async (placeID: string) => {
     try {
-      const placeDetails = await ExpoGooglePlaces.fetchPlaceWithSession(placeID, ["formattedAddress", "coordinate"]);
-      console.log("[Example App] Place details", JSON.stringify(placeDetails, null, 4));
+      const placeDetails = await ExpoGooglePlaces.fetchPlaceWithSession(placeID);
+      console.log(`[Example App (${Platform.OS.toUpperCase()})] Place details`, JSON.stringify(placeDetails, null, 4));
     } catch (error) {
-      console.log("[Example App] Error fetching place details", error);
+      console.log(`[Example App (${Platform.OS.toUpperCase()})] Error fetching place details`, error);
     }
   };
 
@@ -19,7 +19,7 @@ export default function App() {
       const predictions = await ExpoGooglePlaces.fetchPredictionsWithSession(search);
       setPredictions(predictions);
     } catch (error) {
-      console.log("[Example App] Error fetching predictions", error);
+      console.log(`[Example App (${Platform.OS.toUpperCase()})] Error fetching predictions`, error);
     }
   };
 

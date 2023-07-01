@@ -85,6 +85,8 @@ export interface Place {
   plusCode: PlusCode;
   /**
    * The place's rating, from `RATING_MIN_VALUE` to `RATING_MAX_VALUE`, based on aggregated user reviews.
+   *
+   * **NOTE:** On iOS its value will be very accurate, but on Android it may be a rounded value.
    */
   rating: number;
   /**

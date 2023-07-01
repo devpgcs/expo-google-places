@@ -137,6 +137,16 @@ internal func serializePlaceFields(originalFields: [String]) -> GMSPlaceField.Ar
     return serializedPlaceFields
 }
 
+internal func hexStringFromColor(color: UIColor) -> String {
+    let components = color.cgColor.components
+    let red = Int((components?[0] ?? 0.0) * 255)
+    let green = Int((components?[1] ?? 0.0) * 255)
+    let blue = Int((components?[2] ?? 0.0) * 255)
+    let alpha: CGFloat = (components?[3] ?? 0.0) * 255
+
+    return "rgba(\(red), \(green), \(blue), \(alpha/255))"
+ }
+
 internal func getPlaceDictionary(place: GMSPlace) -> [String: Any?] {
     var placeDictionary: [String: Any?] = [:]
     
@@ -178,7 +188,7 @@ internal func getPlaceDictionary(place: GMSPlace) -> [String: Any?] {
     }
     
     if let iconBackgroundColor = place.iconBackgroundColor {
-        placeDictionary["iconBackgroundColor"] = iconBackgroundColor.description
+        placeDictionary["iconBackgroundColor"] = hexStringFromColor(color: iconBackgroundColor)
     }
     
     if let iconImageURL = place.iconImageURL {
@@ -230,14 +240,24 @@ internal func getPlaceDictionary(place: GMSPlace) -> [String: Any?] {
     }
     
     if let photos = place.photos {
-        placeDictionary["photos"] = photos.map { photo in
+        placeDictionary["photos"] = photos.map { (photo: GMSPlacePhotoMetadata) in
             var photoDictionary: [String: Any?] = [
                 "height": photo.maxSize.height,
                 "width": photo.maxSize.width,
             ]
 
             if let attributions = photo.attributions {
-                photoDictionary["attributions"] = attributions.string
+                var attributionsDictionary: [String: Any?] = [:]
+                                
+                if let attributionsUrl = attributions.attribute(NSAttributedString.Key(rawValue: "NSLink"), at: 0, effectiveRange: nil) {
+                    attributionsDictionary["url"] = (attributionsUrl as! NSURL).absoluteString
+                }
+                
+                if let attributionsName = attributions.string as String? {
+                    attributionsDictionary["name"] = attributionsName
+                }
+                
+                photoDictionary["attributions"] = attributionsDictionary
             }
             
             return photoDictionary

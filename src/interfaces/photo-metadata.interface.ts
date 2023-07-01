@@ -1,11 +1,13 @@
+import { Attributions } from "./attributions.interface";
+
 /**
  * The metadata corresponding to a single photo associated with a place.
  */
 export interface PhotoMetadata {
   /**
-   * The attributions in HTML format, or an empty String if there are none.
+   * The attributions for this photo.
    */
-  attributions: string;
+  attributions: Attributions;
   /**
    * The maximum height in which the photo is available.
    */

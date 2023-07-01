@@ -125,10 +125,10 @@ In this section you will find the API reference for this library and an explanat
 **Values**
 
 | **Name** | **Value** | **Description** |
-| **UNKNOWN** | `-1` | The business status is not known. (**iOS only**) |
-| **OPERATIONAL** | `0` | The business is operational. |
-| **CLOSED_TEMPORARILY** | `1` | The business is closed temporarily. |
-| **CLOSED_PERMANENTLY** | `2` | The business is closed permanently. |
+| **UNKNOWN** | `0` | The business status is not known. (**iOS only**) |
+| **OPERATIONAL** | `1` | The business is operational. |
+| **CLOSED_TEMPORARILY** | `2` | The business is closed temporarily. |
+| **CLOSED_PERMANENTLY** | `3` | The business is closed permanently. |
 
 #### PlacesPriceLevel (iOS only)
 
@@ -158,6 +158,19 @@ In this section you will find the API reference for this library and an explanat
 | **name** | `string` | Name of the address component, e.g. "Sydney". |
 | **shortName** | `string` | Short name of the address component, e.g. "AU". |
 | **types** | `string[]` | Types of the AddressComponent. For example, "country" or "administrative*area_level_1".<br><br>References*: [PlaceTypesTableOne, PlaceTypesTableTwo, PlaceTypesTableThree](https://developers.google.com/maps/documentation/places/web-service/supported_types) |
+
+#### Attributions
+
+| **Description** |
+| The data provider attribution string for a photo which may contain hyperlinks to the website of each provider.<br><br>In general, these must be shown to the user if data from the `PhotoMetadata` is shown, as described in the Places SDK Terms of Service.<br><br>_References_: [PhotoMetadata](#photometadata) |
+| **Note** |
+| If you are filtering the response of the `fetchPlaceWithSession` method you must **NOT** include the `"photos"` if you are not using the `fetchPhoto` method **(🚧 Under construction)**.<br><br>_References_: [fetchPlaceWithSession](#fetchplacewithsessionplacefields-extends-keyof-placeplaceid-placefields), [Place](#place) |
+
+**Properties**
+
+| **Name** | **Type** | **Description** |
+| **name** | `string` | The name of the organization or person that provided the photo. |
+| **url** | `string` | The URL of the organization or person that provided the photo. |
 
 #### AutocompleteFilter
 
@@ -250,7 +263,7 @@ In this section you will find the API reference for this library and an explanat
 **Properties**
 
 | **Name** | **Type** | **Description** |
-| **attributions** | `string` | The attributions in HTML format, or an empty string if there are none. |
+| **attributions** | `Attributions` | The attributions for this photo.<br><br>_References_: [Attributions](#attributions) |
 | **height** | `number` | The maximum height in which the photo is available. |
 | **width** | `number` | The maximum width in which the photo is available. |
 
@@ -278,7 +291,7 @@ In this section you will find the API reference for this library and an explanat
 | **photos** | `PhotoMetadata[]` | The metadata for a photo associated with a place.<br><br>_References_: [PhotoMetadata](#photometadata) |
 | **priceLevel** | `PlacesPriceLevel | number` | The price level for the place on a scale from `PRICE_LEVEL_MIN_VALUE` to `PRICE_LEVEL_MAX_VALUE`.<br><br>_References_: [PlacesPriceLevel](#placespricelevel-ios-only), [PRICE_LEVEL_MIN_VALUE](#price_level_min_value), [PRICE_LEVEL_MAX_VALUE](#price_level_max_value) |
 | **plusCode** | `PlusCode` | The `PlusCode` location of the Place<br><br>_References_: [PlusCode](#pluscode) |
-| **rating** | `number` | The place's rating, from `RATING_MIN_VALUE` to `RATING_MAX_VALUE`, based on aggregated user reviews.<br><br>_References_: [RATING_MIN_VALUE](#rating_min_value), [RATING_MAX_VALUE](#rating_max_value) |
+| **rating** | `number` | The place's rating, from `RATING_MIN_VALUE` to `RATING_MAX_VALUE`, based on aggregated user reviews.<br><br>**NOTE:** On iOS its value will be very accurate, but on Android it may be a rounded value.<br><br>_References_: [RATING_MIN_VALUE](#rating_min_value), [RATING_MAX_VALUE](#rating_max_value) |
 | **reservable** | `BooleanPlaceAttribute` | The `BooleanPlaceAttribute` for reservations.<br><br>_References_: [BooleanPlaceAttribute](#booleanplaceattribute) |
 | **servesBeer** | `BooleanPlaceAttribute` | The `BooleanPlaceAttribute` for serving beer.<br><br>_References_: [BooleanPlaceAttribute](#booleanplaceattribute) |
 | **servesBreakfast** | `BooleanPlaceAttribute` | The `BooleanPlaceAttribute` for serving breakfast.<br><br>_References_: [BooleanPlaceAttribute](#booleanplaceattribute) |

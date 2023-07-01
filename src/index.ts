@@ -9,6 +9,7 @@ import { PlacesPriceLevel } from "./enums/places-price-level.enum";
 
 // Interfaces
 import { AddressComponent } from "./interfaces/address-component.interface";
+import { Attributions } from "./interfaces/attributions.interface";
 import { AutocompleteFilter } from "./interfaces/autocomplete-filter.interface";
 import { AutocompletePrediction } from "./interfaces/autocomplete-prediction.interface";
 import { LatLng } from "./interfaces/lat-lng.interface";
@@ -68,6 +69,7 @@ export const fetchPlaceWithSession = async <PlaceFields extends (keyof Place)[]>
 
 export {
   AddressComponent,
+  Attributions,
   AutocompleteFilter,
   AutocompletePrediction,
   BooleanPlaceAttribute,

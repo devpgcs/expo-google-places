@@ -1,14 +1,16 @@
 package expo.modules.googleplaces
 
+import androidx.core.graphics.alpha
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.DayOfWeek
 import com.google.android.libraries.places.api.model.OpeningHours
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.Place.BusinessStatus
 import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.libraries.places.api.model.TimeOfWeek
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
-import expo.modules.core.utilities.ifNull
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
 
@@ -168,7 +170,7 @@ internal fun getOpeningHoursMap(openingHours: OpeningHours): Map<String, Any> {
                 periodMap["openEvent"] = getTimeOfWeekMap(period.open)
             }
 
-            return periodMap
+            periodMap
         }
     }
 
@@ -207,9 +209,9 @@ internal fun getPlaceMap(place: Place): Map<String, Any> {
 
     if (place.businessStatus != null) {
         placeMap["businessStatus"] = when (place.businessStatus) {
-            Place.BusinessStatus.OPERATIONAL -> 0
-            Place.BusinessStatus.CLOSED_TEMPORARILY -> 1
-            Place.BusinessStatus.CLOSED_PERMANENTLY -> 2
+            Place.BusinessStatus.OPERATIONAL -> 1
+            Place.BusinessStatus.CLOSED_TEMPORARILY -> 2
+            Place.BusinessStatus.CLOSED_PERMANENTLY -> 3
         }
     }
 
@@ -237,7 +239,12 @@ internal fun getPlaceMap(place: Place): Map<String, Any> {
     }
 
     if (place.iconBackgroundColor != null) {
-        placeMap["iconBackgroundColor"] = "#${Integer.toHexString(place.iconBackgroundColor)}"
+        val red = place.iconBackgroundColor.red
+        val green = place.iconBackgroundColor.green
+        val blue = place.iconBackgroundColor.blue
+        val alpha = place.iconBackgroundColor.alpha
+
+        placeMap["iconBackgroundColor"] = "rgba($red, $green, $blue, ${alpha / 255f})"
     }
 
     if (place.iconUrl != null) {
@@ -262,8 +269,20 @@ internal fun getPlaceMap(place: Place): Map<String, Any> {
 
     if (place.photoMetadatas != null) {
         placeMap["photos"] = place.photoMetadatas.map { photoMetadata ->
+            val regexName = "\">([^<]+)</a>".toRegex()
+            val regexUrl = "href=\"([^\"]+)\"".toRegex()
+
+            val matchResultName = regexName.find(photoMetadata.attributions)
+            val matchResultUrl = regexUrl.find(photoMetadata.attributions)
+
+            val name = matchResultName?.groupValues?.get(1)
+            val url = matchResultUrl?.groupValues?.get(1)
+
             mapOf(
-                "attributions" to photoMetadata.attributions,
+                "attributions" to mapOf(
+                    "name" to name,
+                    "url" to url
+                ),
                 "height" to photoMetadata.height,
                 "width" to photoMetadata.width
             )
