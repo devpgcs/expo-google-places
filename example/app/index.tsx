@@ -1,29 +1,46 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Link } from "expo-router";
+import { Link, Stack } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
+
+import theme from "../theme";
 
 const Root = () => {
   return (
-    <View style={styles.container}>
+    <View style={theme.container}>
+      <Stack.Screen
+        options={{
+          title: "Expo Google Places",
+        }}
+      />
+
       <Text style={styles.heading}>Welcome to Expo Google Places!</Text>
-      <Link href="/address-search">Search an address</Link>
+
+      <Text style={styles.description}>
+        The following are examples of the{" "}
+        <Text
+          style={theme.textLink}
+          onPress={() => WebBrowser.openBrowserAsync("https://devpgcs.github.io/expo-google-places/guides.html")}
+        >
+          Guides
+        </Text>{" "}
+        documentation:
+      </Text>
+
+      <Link href={{ pathname: "/guides/per-session/autocomplete" }} style={theme.textLink}>
+        1. Per Session (session-based) approach
+      </Link>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 100,
-  },
   heading: {
-    width: "100%",
-    fontSize: 32,
-    fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 16,
+    ...theme.heading,
+  },
+  description: {
+    marginVertical: 32,
+    ...theme.text,
   },
 });
 

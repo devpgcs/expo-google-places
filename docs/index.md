@@ -33,6 +33,21 @@ If you already know the benefits of this library or you just want to give it a t
 
 <br>
 
+### Requirements
+
+Before you start, make sure you have the following:
+
+1. **Google Cloud project** with the Google Places API enabled. If not, [create one](https://developers.google.com/workspace/guides/create-project).
+2. **Billing account** linked with the Google Cloud project. If not, [create one](https://cloud.google.com/billing/docs/how-to/create-billing-account) and link it.
+3. **The Places API** is enabled in your Google Cloud project. If not, [enable it](https://console.cloud.google.com/apis/library/places-backend.googleapis.com). You will be asked to enable all the Google Maps APIs but you don't have to if you don't really need them.
+4. **API key for Android** in your Google Cloud project. If not, [create one](https://console.cloud.google.com/apis/credentials), restrict it with the package name of your app and enable the Places API.
+5. **API key for iOS** in your Google Cloud project. If not, [create one](https://console.cloud.google.com/apis/credentials), restrict it with the bundle identifier of your app and enable the Places API.
+
+| **NOTE** |
+| The steps to restrict the API keys are mixed with the ["Configure the app"](#3-configure-the-app) step where you set the iOS bundle identifier and Android package name. So, you can continue reading and once you reach that step you can go back and complete the steps 4 and 5 to restrict the API keys.<br><br>Even for Android, you need the SHA-1 certificate fingerprint which will be generated after you finish the ["Prepare the app"](#4-prepare-the-app) step. |
+
+<br>
+
 ### Expo managed workflow 🤖
 
 #### 1. Create a new Expo project (optional)
@@ -105,8 +120,8 @@ npx expo prebuild
 Then, one of the following depending on the platform you want to use:
 
 ```
-npx expo run:android
-npx expo run:ios
+npm run android
+npm run ios
 ```
 
 <br>
@@ -119,75 +134,4 @@ npx expo run:ios
 
 ## Use the library
 
-Now you can use the library inside of your project, for example:
-
-```tsx
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { useState } from "react";
-import * as ExpoGooglePlaces from "expo-google-places";
-
-export default function App() {
-  const [predictions, setPredictions] = useState<ExpoGooglePlaces.AutocompletePrediction[]>([]);
-
-  const fetchPlace = async (placeID: string) => {
-    try {
-      const placeDetails = await ExpoGooglePlaces.fetchPlaceWithSession(placeID, ["formattedAddress"]);
-      console.log("[Example App] Place details", JSON.stringify(placeDetails, null, 4));
-    } catch (error) {
-      console.log("[Example App] Error fetching place details", error);
-    }
-  };
-
-  const fetchPredictions = async (search: string) => {
-    try {
-      const predictions = await ExpoGooglePlaces.fetchPredictionsWithSession(search);
-      setPredictions(predictions);
-    } catch (error) {
-      console.log("[Example App] Error fetching predictions", error);
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <Text>Hello Google Places module!</Text>
-
-      <TextInput placeholder="Search an address" style={styles.input} onChangeText={fetchPredictions} />
-
-      {predictions.map((prediction) => (
-        <View key={prediction.placeID} style={styles.prediction}>
-          <Text style={styles.predictionText}>{prediction.fullText}</Text>
-          <Button title="Log" onPress={() => fetchPlace(prediction.placeID)} />
-        </View>
-      ))}
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 100,
-  },
-  input: {
-    borderWidth: 1,
-    width: "100%",
-    padding: 16,
-    marginVertical: 16,
-  },
-  prediction: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "rgba(0,0,0,0.1)",
-    padding: 16,
-    borderRadius: 12,
-    marginTop: 4,
-  },
-  predictionText: {
-    flex: 1,
-  },
-});
-```
+Now that you have the library installed in your project, you can start using it. Follow one of the [guides](/expo-google-places/guides) depending on your needs.
