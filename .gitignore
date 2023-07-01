@@ -64,3 +64,6 @@ android/keystores/debug.keystore
 .env
 .env.*
 .*.env
+
+# Misc
+expo-google-places-*.tgz
