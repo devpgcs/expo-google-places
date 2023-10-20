@@ -1,6 +1,6 @@
 {
   "name": "expo-google-places",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Expo library to use the Google Places API",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -14,6 +14,7 @@
     "expo-module": "expo-module",
     "open:ios": "open -a \"Xcode\" example/ios",
     "open:android": "open -a \"Android Studio\" example/android",
+    "pack": "npm pack",
     "docs": "cd docs && bundle exec jekyll serve"
   },
   "keywords": [
