@@ -13,9 +13,7 @@ If your application requires Place Details such as the place name, business stat
 
 <br>
 
-<video width="100%" controls muted>
-    <source src="./assets/per-session-example.mp4" type="video/mp4" />
-</video>
+<iframe width="100%" height="500" src="https://www.youtube.com/embed/kW61cYf_-PA?si=7Cz_b-R-jvUthDM-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 <br>
 
