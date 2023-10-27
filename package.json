@@ -1,6 +1,6 @@
 {
   "name": "expo-google-places",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Expo library to use the Google Places API",
   "main": "build/index.js",
   "types": "build/index.d.ts",

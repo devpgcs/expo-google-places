@@ -24,13 +24,13 @@ class ExpoGooglePlacesModule : Module() {
     OnCreate {
       val packageName = appContext?.reactContext?.packageName.toString()
       val applicationInfo = appContext?.reactContext?.packageManager?.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
-      val placesApiKey = applicationInfo?.metaData?.getString("com.google.android.geo.API_KEY")
+      val placesApiKey = applicationInfo?.metaData?.getString("com.google.android.geo.PLACES_API_KEY")
 
       Places.initialize(appContext.reactContext, placesApiKey)
 
       if (Places.isInitialized()) {
         placesClient = Places.createClient(appContext.reactContext)
-        Log.d("ExpoGooglePlaces", "The com.google.android.geo.API_KEY was provided successfully. PlacesClient initialized")
+        Log.d("ExpoGooglePlaces", "The com.google.android.geo.PLACES_API_KEY was provided successfully. PlacesClient initialized")
       }
     }
 
