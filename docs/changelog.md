@@ -5,6 +5,14 @@ title: Changelog
 
 This is the log of notable changes to the Expo Google Places library. Is recommended to check this page before updating the library to a new version.
 
+## v0.2.5 - 2024-02-21
+
+#### Support for Expo SDK 50
+
+- The `android/build.gradle` file has been updated to support Expo SDK 50 following the [Gradle Migration](https://github.com/expo/fyi/blob/main/expo-modules-gradle8-migration.md#error-task-current-target-is-17-and-compilereleasekotlin-task-current-target-is-11-jvm-target-compatibility-should-be-set-to-the-same-java-version) guide published by Expo.
+- The `ios/ExpoGooglePlaces.podspec` file has been updated to support Expo SDK 50 following the [Upgrading your app](https://expo.dev/changelog/2024/01-18-sdk-50#%E2%9E%A1%EF%B8%8F-upgrading-your-app) steps published by Expo.
+- The `ios/ExpoGooglePlacesMiscellaneous.swift` file has been updated so the `LatLng` and `LocationBoundsFilter` structures conform to the `AnyArgument` protocol which looks to be required by the Expo SDK 50.
+
 ## v0.2.4 - 2023-10-26
 
 #### Support when also using React Native Maps library
