@@ -1,12 +1,12 @@
 import ExpoModulesCore
 import GooglePlaces
 
-internal struct LatLng {
+internal struct LatLng: AnyArgument {
     let latitude: Double
     let longitude: Double
 }
 
-internal struct LocationBoundsFilter {
+internal struct LocationBoundsFilter: AnyArgument {
     let northEastBounds: LatLng;
     let southWestBounds: LatLng;
 }
