@@ -67,3 +67,7 @@ android/keystores/debug.keystore
 
 # Misc
 expo-google-places-*.tgz
+
+# Expo Prebuild
+/example/android
+/example/ios
