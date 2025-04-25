@@ -3549,9 +3549,9 @@ expo-font@~12.0.10:
   dependencies:
     fontfaceobserver "^2.1.0"
 
-"expo-google-places@file:../expo-google-places-0.2.5.tgz":
-  version "0.2.5"
-  resolved "file:../expo-google-places-0.2.5.tgz#c5cc4ab627ec52af45e798038f0d8b97a851a5a4"
+"expo-google-places@file:../expo-google-places-v0.2.6.tgz":
+  version "0.2.6"
+  resolved "file:../expo-google-places-v0.2.6.tgz#6d748392dd3c7368de33b87d4b6b6f2982b3c5d1"
 
 expo-json-utils@~0.13.0:
   version "0.13.1"
