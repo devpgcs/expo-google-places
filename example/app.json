@@ -15,14 +15,17 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "expo.modules.googleplaces.example"
+      "bundleIdentifier": "devpgcs.expogoogleplaces.example",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "expo.modules.googleplaces.example"
+      "package": "devpgcs.expogoogleplaces.example"
     },
     "web": {
       "favicon": "./assets/favicon.png",
