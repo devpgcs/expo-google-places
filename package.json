@@ -1,6 +1,6 @@
 {
   "name": "expo-google-places",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Expo library to use the Google Places API",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -32,7 +32,7 @@
   "homepage": "https://devpgcs.github.io/expo-google-places",
   "dependencies": {},
   "devDependencies": {
-    "@types/react": "^18.0.25",
+    "@types/react": "^19.0.8",
     "@types/react-native": "^0.70.6",
     "expo-module-scripts": "^3.0.4",
     "expo-modules-core": "^1.1.0"

@@ -5,6 +5,11 @@ title: Changelog
 
 This is the log of notable changes to the Expo Google Places library. Is recommended to check this page before updating the library to a new version.
 
+## v0.2.6 - 2025-04-25
+
+- `android/build.gradle` following the Expo SDK 51 [Modernized build.gradle diff](https://gist.github.com/brentvatne/88e27545243b828554bb376a7e6dd08d) gist published by [@brentvatne](https://github.com/brentvatne).
+- `/example/android` and `/example/ios` folders removed to solve `expo-doctor` issues
+
 ## v0.2.5 - 2024-02-21
 
 #### Support for Expo SDK 50
