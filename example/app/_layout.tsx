@@ -7,7 +7,7 @@ export default function Layout() {
   return (
     <>
       <Stack
-        initialRouteName="home"
+        initialRouteName="index"
         screenOptions={{
           headerStyle: theme.primaryBg,
           headerTintColor: "#fff",
