@@ -14,11 +14,11 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
 
-internal abstract class JSONLatLng: Record {
+internal class JSONLatLng: Record {
     @Field
-    abstract var latitude: Double
+    var latitude: Double = 0.0
     @Field
-    abstract var longitude: Double
+    var longitude: Double = 0.0
 }
 
 internal class LocationBoundsFilter: Record {
