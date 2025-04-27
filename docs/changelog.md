@@ -7,6 +7,7 @@ This is the log of notable changes to the Expo Google Places library. Is recomme
 
 ## v0.2.7 - 2025-04-26
 
+- The `android/src/main/java/expo/modules/googleplaces/ExpoGooglePlacesMiscellaneous.kt` file has been updated to fix the issue reported in the [#16](https://github.com/devpgcs/expo-google-places/issues/16) issue by [@thatAwesomeKK](https://github.com/thatAwesomeKK) where the `origin`, `locationBias` and `locationRestriction` properties were not being cast as expected.
 - The `ios/ExpoGooglePlacesMiscellaneous.swift` file has been updated to fix the issue reported in the [#17](https://github.com/devpgcs/expo-google-places/issues/17) issue by [@maxkudla](https://github.com/maxkudla) where the `origin`, `locationBias` and `locationRestriction` properties were not being cast as expected.
 - Example app updated to use the latest Expo SDK 52 version.
 
